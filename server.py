@@ -44,7 +44,7 @@ def addauthor():
                 flash("successful")
         except:
             con.rollback()
-            # flash("failed")
+            flash("failed")
         finally:
             con.close()
     return render_template("./author/addauthor.html")
