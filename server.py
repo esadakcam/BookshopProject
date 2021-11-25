@@ -35,7 +35,6 @@ def addauthor():
         message = db.add_author(authorId, firstName,
                                 lastName, birthday, country, hrs)
         flash(message)
-
     return render_template("./author/addauthor.html")
 
 

@@ -8,20 +8,24 @@ class Database:
     def __connect_database(self):
         con = sqlite3.connect(self.databaseName)
         con.row_factory = sqlite3.Row
-        return con.cursor()
+        return con
 
     def show_all_authors(self):
-        cur = self.__connect_database()
+        cur = self.__connect_database().cursor()
         cur.execute("SELECT * FROM Author")
         return cur.fetchall()
 
     def add_author(self, authorId, firstName, lastName, birthday, country, hrs):
-        cur = self.__connect_database()
-        message = "Failed"
+
         try:
-            cur.execute(
-                f'Insert Into AUTHOR Values("{authorId}","{firstName}","{lastName}","{birthday}","{country}", "{hrs}")')
-            message = "Success"
+            with sqlite3.connect("Bookshop.db") as con:
+                cur = con.cursor()
+                cur.execute(
+                    f'Insert Into AUTHOR Values("{authorId}","{firstName}","{lastName}","{birthday}","{country}", "{hrs}")')
+
+                message = "Successful"
         except:
-            pass
+            message = "Failed"
+        finally:
+            con.close()
         return message
