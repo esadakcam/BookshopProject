@@ -22,7 +22,7 @@ Show Authors
             <tbody>
                 {% for row in rows %}
                 <tr>
-                    <th scope="row">{{row["AuthId"]}}</th>
+                    <th scope="row"><a href='update_author{{row["AuthId"]}}'>{{row["AuthId"]}}</a></th>
                     <td>{{row["FirstName"]}}</td>
                     <td>{{row["LastName"]}}</td>
                     <td>{{row["Birthday"]}}</td>

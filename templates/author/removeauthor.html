@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Remove Author
+{% endblock %}}
+
+{% block Body %}
+<div class="container" style="padding-top: 30px; width: 50%;">
+    <div class="card">
+        <div class="card-header">
+            Remove Author
+        </div>
+        <div class="/author/removeauthor">
+            <form action="/author/removeauthor" method="POST">
+                <div class="form-group">
+                    <label>Author ID</label>
+                    <input type="text" class="form-control" name="authorId">
+                </div>
+
+                <button type="Remove" class="btn btn-danger">Remove</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
