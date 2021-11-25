@@ -26,6 +26,36 @@ class Database:
                 message = "Successful"
         except:
             message = "Failed"
-        finally:
-            con.close()
+
+        return message
+
+    def remove_author(self, authorId):
+        try:
+            with sqlite3.connect("Bookshop.db") as con:
+                cur = con.cursor()
+                cur.execute(
+                    f'Select * From Author Where(AuthID ="{authorId}")')
+                if len(cur.fetchall()) == 0:
+                    exception_meessage = "No such author"
+                    raise Exception(exception_meessage)
+
+                query = f'Delete From AUTHOR Where(AuthID ="{authorId}")'
+                cur.execute(query)
+
+                message = "Success"
+        except Exception as exp:
+            message = exp.args
+
+        return message
+
+    def update_author(self, key, firstName, lastName, birthday, country, hrs):
+        authorId = key
+        try:
+            with sqlite3.connect("Bookshop.db") as con:
+                cur = con.cursor()
+                cur.execute(
+                    f'Update AUTHOR Set FirstName = "{firstName}", LastName = "{lastName}",Birthday = "{birthday}",CountryOfResidence = "{country}",HrsWritingPerDay= "{hrs}" Where AuthID = "{authorId}"')
+                message = "Successful"
+        except:
+            message = "Failed"
         return message
