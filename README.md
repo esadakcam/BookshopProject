@@ -1,4 +1,4 @@
 # itudb2109
 
 
-<img width="600" height="400" src="/relations.jpeg">
+<img width="800" height="700" src="/relations.jpeg">
