@@ -1,0 +1,2 @@
+28.11.2021: 
+        Until now, project skeleton (style, navbar, dependencies etc) for all tables are created, Author table CRUD operations are completed. 
