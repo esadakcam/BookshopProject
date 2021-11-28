@@ -1,0 +1,2 @@
+14-29.11.2021   Data Preprocessing and building main structure of project are finished. Also one main table and operations of it were made.
+                Second table which is Series was done with operations.
