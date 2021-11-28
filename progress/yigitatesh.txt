@@ -1,0 +1,1 @@
+14-29.11.2021	The CRUD operations of the main table Edition are done. HTML templates for Edition table are done.
