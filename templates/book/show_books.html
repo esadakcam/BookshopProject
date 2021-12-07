@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Show Books
+{% endblock %}
+
+{% block Body %}
+
+<div class="container" style="padding-top: 15px;">
+    <div class="table-responsive">
+        <table class="table table-hover table-dark" , style="width: 100%">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Web Site</th>
+                    <th scope="col">Available Sales Area</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Total Orders</th>
+                    <th scope="col">Auth ID</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+
+                    <td>{{row["BookID"]}}</td>
+                    <td>{{row["Title"]}}</td>
+                    <td>{{row["OnlineSalesWebsite"]}}</td>
+                    <td>{{row["AvaliableSalesAreas"]}}</td>
+                    <td>{{row["Stock"]}}</td>
+                    <td>{{row["TotalNumberOfOrders"]}}</td>
+                    <th scope="row"><a href='author_info{{row["AuthId"]}}'>{{row["AuthId"]}}</a></th>
+
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

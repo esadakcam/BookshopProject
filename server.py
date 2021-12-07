@@ -14,7 +14,8 @@ def index():
 # showbooks is not implemented
 @app.route("/book/showbooks")
 def showbooks():
-    return render_template("show_books.html")
+    rows = db.show_all_books()
+    return render_template("./book/show_books.html", rows=rows)
 
 
 @app.route("/author/showauthor")
@@ -57,27 +58,14 @@ def update_author(key):
         message = db.update_author(
             key, firstName, lastName, birthday, country, hrs)
         flash(message)
-    # authorId = key
-    # if request.method == "POST":
-    #     try:
-    #         firstName = request.form["firstName"]
-    #         lastName = request.form["lastName"]
-    #         birthday = request.form["birthday"]
-    #         country = request.form["country"]
-    #         hrs = request.form["hrs"]
-    #         with sqlite3.connect("Bookshop.db") as con:
-    #             cur = con.cursor()
-    #             cur.execute(
-    #                 f'Update AUTHOR Set FirstName = "{firstName}", LastName = "{lastName}",Birthday = "{birthday}",CountryOfResidence = "{country}",HrsWritingPerDay= "{hrs}" Where AuthID = "{authorId}"')
-
-    #             flash("successful")
-    #     except:
-
-    #         flash("failed")
-    #     finally:
-    #         con.close()
-
     return render_template("./author/update_author.html", authorId=key)
+
+
+@app.route("/book/author_info<string:key>")
+def author_info(key):
+    rows, message = db.show_author_info(key)
+    flash(message)
+    return render_template("./book/author_info.html", rows=rows)
 
 
 if __name__ == "__main__":
