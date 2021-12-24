@@ -27,13 +27,13 @@ def showauthor():
 @app.route("/author/addauthor", methods=["POST", "GET"])
 def addauthor():
     if request.method == "POST":
-        authorId = request.form["authorId"]
+
         firstName = request.form["firstName"]
         lastName = request.form["lastName"]
         birthday = request.form["birthday"]
         country = request.form["country"]
         hrs = request.form["hrs"]
-        message = db.add_author(authorId, firstName,
+        message = db.add_author(firstName,
                                 lastName, birthday, country, hrs)
         flash(message)
     return render_template("./author/addauthor.html")
@@ -56,7 +56,7 @@ def update_author(key):
         country = request.form["country"]
         hrs = request.form["hrs"]
         message = db.update_author(
-            key, firstName, lastName, birthday, country, hrs)
+            str(key), str(firstName), str(lastName), str(birthday), str(country), str(hrs))
         flash(message)
     return render_template("./author/update_author.html", authorId=key)
 
