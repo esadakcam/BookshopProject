@@ -1,6 +1,8 @@
 from flask import Flask, render_template, flash, request
 import sqlite3
 from Database import Database
+from base64 import b64encode
+
 
 app = Flask(__name__)
 db = Database("Bookshop.db")
@@ -15,7 +17,10 @@ def index():
 @app.route("/book/showbooks")
 def showbooks():
     rows = db.show_all_books()
-    return render_template("./book/show_books.html", rows=rows)
+    imgs = []
+    for i in rows:
+        imgs.append(b64encode(i["Img"]).decode("utf-8"))
+    return render_template("./book/show_books.html", rows=rows, imgs=imgs)
 
 
 @app.route("/author/showauthor")

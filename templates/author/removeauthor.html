@@ -5,6 +5,8 @@ Remove Author
 {% endblock %}}
 
 {% block Body %}
+
+
 <div class="container" style="padding-top: 30px; width: 50%;">
     <div class="card">
         <div class="card-header">
@@ -14,12 +16,24 @@ Remove Author
             <form action="/author/removeauthor" method="POST">
                 <div class="form-group">
                     <label>Author ID</label>
-                    <input type="text" class="form-control" name="authorId">
+                    <input type="text" class="form-control" name="authorId" id="inp">
                 </div>
 
-                <button type="Remove" class="btn btn-danger">Remove</button>
+                <button type="Remove" class="btn btn-danger" id="remove"
+                    onclick="alert(`${document.getElementById('inp').value} id is getting deleted. Are you sure?`)">Remove</button>
             </form>
         </div>
     </div>
 </div>
+<script>
+
+    let el = document.getElementById(remove)
+    el.onclick = () => {
+        let str = `${document.getElementById("inp").value} id is getting deleted. Are u okay?`
+        alert(str0)
+    }
+
+</script>
+
+
 {% endblock %}

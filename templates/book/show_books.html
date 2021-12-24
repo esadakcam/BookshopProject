@@ -47,12 +47,35 @@ Show Books
     <div class="row">
         {%for row in rows %}
         <div class="col">
+
             <div class="card text-center" style="width: 18rem;">
-                <img class="card-img-top" src="..." alt="Card image cap">
+                <img class="card-img-top" src="data:;base64,{{ imgs[loop.index] }}" alt="Card image cap">
+
                 <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">{{row["Title"]}}</h5>
+                    <div class="d-flex justify-content-between">
+                        <div>Book Id:</div>
+                        <div>{{row["BookID"]}}</div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>Web Site:</div>
+                        <div>{{row["OnlineSalesWebsite"]}}</div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>Area:</div>
+                        <div>{{row["AvaliableSalesAreas"]}}</div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>Stock:</div>
+                        <div>{{row["Stock"]}}</div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>Total Order:</div>
+                        <div>{{row["TotalNumberOfOrders"]}}</div>
+                    </div>
+
+
+                    <a href='author_info{{row["AuthId"]}} ' class="btn btn-primary">Show Author</a>
                 </div>
             </div>
         </div>
