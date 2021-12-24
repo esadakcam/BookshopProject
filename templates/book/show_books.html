@@ -6,7 +6,7 @@ Show Books
 
 {% block Body %}
 
-<div class="container" style="padding-top: 15px;">
+<!-- <div class="container" style="padding-top: 15px;">
     <div class="table-responsive">
         <table class="table table-hover table-dark" , style="width: 100%">
             <thead>
@@ -40,5 +40,24 @@ Show Books
             </tbody>
         </table>
     </div>
+</div> -->
+
+
+<div class="container">
+    <div class="row">
+        {%for row in rows %}
+        <div class="col">
+            <div class="card text-center" style="width: 18rem;">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
 {% endblock %}
