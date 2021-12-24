@@ -44,6 +44,21 @@ def addauthor():
     return render_template("./author/addauthor.html")
 
 
+@app.route("/book/addbook", methods=["POST", "GET"])
+def addbook():
+    if request.method == "POST":
+
+        firstName = request.form["firstName"]
+        lastName = request.form["lastName"]
+        birthday = request.form["birthday"]
+        country = request.form["country"]
+        hrs = request.form["hrs"]
+        message = db.add_author(firstName,
+                                lastName, birthday, country, hrs)
+        flash(message)
+    return render_template("./book/addbook.html")
+
+
 @app.route("/author/removeauthor", methods=["POST", "GET"])
 def removeauthor():
     if request.method == "POST":
