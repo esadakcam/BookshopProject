@@ -5,9 +5,6 @@ Show Authors
 {% endblock %}
 
 {% block Body %}
-{% for element in rows %}
-{{element}}
-{% endfor %}
 <div class="container" style="padding-top: 15px;">
     <div class="table-responsive">
         <table class="table table-hover table-dark" , style="width: 100%">
@@ -22,16 +19,14 @@ Show Authors
                 </tr>
             </thead>
             <tbody>
-                {% for row in rows %}
                 <tr>
-                    <th scope="row"><a href='update_author{{row["AuthId"]}}'>{{row["Author.AuthID"]}}</a></th>
-                    <td>{{row["FirstName"]}}</td>
-                    <td>{{row["LastName"]}}</td>
-                    <td>{{row["Birthday"]}}</td>
-                    <td>{{row["CountryOfResidence"]}}</td>
-                    <td>{{row["HrsWritingPerDay"]}}</td>
+                    <th scope="rows"><a href='/author/update_author{{rows[0][0]}}'>{{rows[0][0]}}</a></th>
+                    <td>{{rows[0][1]}}</td>
+                    <td>{{rows[0][2]}}</td>
+                    <td>{{rows[0][3]}}</td>
+                    <td>{{rows[0][4]}}</td>
+                    <td>{{rows[0][5]}}</td>
                 </tr>
-                {% endfor %}
             </tbody>
         </table>
     </div>
