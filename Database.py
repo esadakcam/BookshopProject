@@ -6,6 +6,8 @@ import string
 class Database:
     def __init__(self, databaseName):
         self.databaseName = databaseName
+        with sqlite3.connect(self.databaseName) as con:
+            con.cursor().execute("PRAGMA foreign_keys = ON;")
 
     def __connect_database(self):
         con = sqlite3.connect(self.databaseName)
@@ -51,15 +53,15 @@ class Database:
 
     def remove_author(self, authorId):
         try:
-            with sqlite3.connect("Bookshop.db") as con:
+            with sqlite3.connect(self.databaseName) as con:
                 cur = con.cursor()
-                query = 'Select * From Author Where (AuthID = ? )'
-                cur.execute(query, (str(authorId),))
+                # query = 'Select * From Author Where (AuthID = ? )'
+                # cur.execute(query, (str(authorId),))
 
-                if len(cur.fetchall()) == 0:
-                    exception_meessage = "No such author"
-                    raise Exception(exception_meessage)
-
+                # if len(cur.fetchall()) == 0:
+                #     exception_meessage = "No such author"
+                #     raise Exception(exception_meessage)
+                cur.execute("PRAGMA foreign_keys = ON;")
                 query = 'Delete From AUTHOR Where(AuthID = ?)'
                 cur.execute(query, (str(authorId),))
 
@@ -72,7 +74,7 @@ class Database:
     def update_author(self, key, firstName, lastName, birthday, country, hrs):
         authorId = key
         try:
-            with sqlite3.connect("Bookshop.db") as con:
+            with sqlite3.connect(self.databaseName) as con:
                 cur = con.cursor()
                 old_data_query = 'Select * From Author Where (AuthId = ?)'
                 cur.execute(old_data_query, (str(key),))
@@ -96,7 +98,7 @@ class Database:
         row = {}
         message = ""
         try:
-            with sqlite3.connect("Bookshop.db") as con:
+            with sqlite3.connect(self.databaseName) as con:
                 cur = con.cursor()
                 query = """Select Author.AuthID, FirstName, LastName,Birthday,CountryOfResidence,HrsWritingPerDay
                 From Book Join Author on (Book.AuthID = Author.AuthID)
