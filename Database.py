@@ -1,6 +1,7 @@
 import sqlite3
 import random
 import string
+from passlib.hash import sha256_crypt
 
 
 class Database:
@@ -24,6 +25,41 @@ class Database:
         cur.execute("SELECT * FROM Author")
         return cur.fetchall()
 
+    def register(self, name, username, email, password):
+        message = ""
+        try:
+            with sqlite3.connect(self.databaseName) as con:
+                cur = con.cursor()
+                query = "Insert Into Users(name,username,password,email) Values(?,?,?,?)"
+                cur.execute(query, (name, username, password, email))
+                message = "Success"
+        except Exception as exp:
+            message = str(exp.args) + "Failed"
+        return message
+
+    def login(self, username, password):
+        message = ""
+        success = False
+        try:
+            with sqlite3.connect(self.databaseName) as con:
+                cur = con.cursor()
+                # query = "Select From Author Where name = ? and password = ?"
+                query = "Select password From Users Where username = ?"
+                cur.execute(query, (username,))
+                uname_response = cur.fetchone()
+                if uname_response:
+                    if sha256_crypt.verify(password, uname_response[0]):
+                        message = "Success"
+                        success = True
+                    else:
+                        message = "Wrong Password"
+                else:
+                    message = "Wrong username"
+        except Exception as exp:
+            message = "Failed" + str(exp.args)
+
+        return message, success
+
     def add_author(self, firstName, lastName, birthday, country, hrs):
         if not (firstName and lastName):
             message = "First Name and Last Name must be proivded."
@@ -33,7 +69,7 @@ class Database:
                 digits = string.digits
                 newId = ''.join(random.choice(letters) for i in range(
                     2)) + ''.join(random.choice(digits) for i in range(3))
-                with sqlite3.connect("Bookshop.db") as con:
+                with sqlite3.connect(self.databaseName) as con:
                     cur = con.cursor()
                     id_query = 'Select AuthID from Author'
                     cur.execute(id_query)

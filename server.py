@@ -1,16 +1,62 @@
-from flask import Flask, render_template, flash, request
+from flask import Flask, render_template, session, flash, request, redirect, url_for
 import sqlite3
 from Database import Database
 from base64 import b64encode
-
+from RegisterForm import RegisterForm
+from passlib.hash import sha256_crypt
+from LoginForm import LoginForm
 
 app = Flask(__name__)
 db = Database("Bookshop.db")
 
 
+def logged(function):  # add wishlistte kullanılcak
+    @wraps(function)
+    def decorated_function(*args, **kwargs):
+        if "logged_in" in session:
+            return function(*args, **kwargs)
+        else:
+            flash("Please login to see this page.")
+            return redirect(url_for("login"))
+    return decorated_function
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    form = RegisterForm(request.form)
+    if request.method == "POST" and form.validate():
+        name = form.name.data
+        username = form.username.data
+        email = form.email.data
+        password = sha256_crypt.encrypt(form.password.data)
+        message = db.register(name, username, email, password)
+        flash(message)
+        return redirect(url_for("index"))
+    else:
+        return render_template("register.html", form=form)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm(request.form)
+    if request.method == "POST":
+        username = form.username.data
+        password = form.password.data
+        message, success = db.login(username, password)
+        flash(message)
+        if(success):
+            redirect(url_for("index"))
+            session["logged_in"] = True
+            session["username"] = username
+            return redirect(url_for("index"))
+        else:
+            return redirect(url_for("login"))
+    return render_template("login.html", form=form)
 
 
 # showbooks is not implemented
