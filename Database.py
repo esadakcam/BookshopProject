@@ -8,7 +8,20 @@ class Database:
     def __init__(self, databaseName):
         self.databaseName = databaseName
         with sqlite3.connect(self.databaseName) as con:
-            con.cursor().execute("PRAGMA foreign_keys = ON;")
+            cur = con.cursor()
+            # TODO: diger tabloların createlerini de ekle
+            query = """
+            CREATE TABLE IF NOT EXISTS AUTHOR (
+	        AuthID	TEXT,
+	        FirstName	TEXT,
+	        LastName	TEXT,
+	        Birthday	TIMESTAMP,
+	        CountryOfResidence	TEXT,
+	        HrsWritingPerDay	REAL,
+	        PRIMARY KEY("AuthID"));
+            """
+            cur.execute(query)
+            print("ok")
 
     def __connect_database(self):
         con = sqlite3.connect(self.databaseName)
