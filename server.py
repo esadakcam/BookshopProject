@@ -6,6 +6,7 @@ from RegisterForm import RegisterForm
 from passlib.hash import sha256_crypt
 from LoginForm import LoginForm
 
+# TODO: SHOW BOOS bir birim kaymış düzelt
 app = Flask(__name__)
 db = Database("Bookshop.db")
 
