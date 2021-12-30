@@ -36,8 +36,17 @@ class Database:
 
 #TODO: doldur
     def make_fav(self, username, key):
-        # query = "Update Users set WishList=? where username = ?"
-        pass
+        message = ""
+        try:
+            with sqlite3.connect(self.databaseName) as con:
+                message = ""
+                cur = con.cursor()
+                query = "Update Users set WishList=? where username = ?"
+                cur.execute(query, (key, username))
+                message = "Sucess"
+        except Exception as exp:
+            message = str(exp.args) + "Failed"
+        return message
 
     def show_all_authors(self):
         cur = self.__connect_database().cursor()

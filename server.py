@@ -5,15 +5,16 @@ from base64 import b64encode
 from RegisterForm import RegisterForm
 from passlib.hash import sha256_crypt
 from LoginForm import LoginForm
+from functools import wraps
 
 # TODO: Author-Book dogru mu kontrol et
+
+# TODO:logout implenment et
 app = Flask(__name__)
 db = Database("Bookshop.db")
 
-# TODO: Kullanilmadi kullan
 
-
-def logged(function):  # add wishlistte kullanılcak
+def require_login(function):  # add wishlistte kullanılcak
     @wraps(function)
     def decorated_function(*args, **kwargs):
         if "logged_in" in session:
@@ -131,8 +132,10 @@ def update_author(key):
 
 
 @app.route("/book/make_fav<string:key>")
+@require_login
 def make_fav(key):
-    db.make_fav(session["username"], key)
+    message = db.make_fav(session["username"], key)
+    flash(message)
     return redirect(url_for("showbooks"))
 
 
