@@ -31,7 +31,13 @@ class Database:
     def show_all_books(self):
         cur = self.__connect_database().cursor()
         cur.execute("SELECT * From Book")
-        return cur.fetchall()
+        rows = cur.fetchall()
+        return rows
+
+#TODO: doldur
+    def make_fav(self, username, key):
+        # query = "Update Users set WishList=? where username = ?"
+        pass
 
     def show_all_authors(self):
         cur = self.__connect_database().cursor()

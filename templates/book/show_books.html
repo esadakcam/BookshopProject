@@ -49,7 +49,7 @@ Show Books
         <div class="col-lg-3 d-flex align-items-stretch">
 
             <div class="card text-center my-2" style="width: 18rem;">
-                <img class="card-img-top" src="data:;base64,{{ imgs[loop.index] }}" alt="Card image cap">
+                <img class="card-img-top" src="data:;base64,{{ imgs[loop.index - 1] }}" alt="Card image cap">
 
                 <div class="card-body">
                     <h5 class="card-title">{{row["Title"]}}</h5>
@@ -76,6 +76,9 @@ Show Books
 
 
                     <a href='author_info{{row["AuthId"]}} ' class="btn btn-primary">Show Author</a>
+                    {%if session["logged_in"]%}
+                    <a href='make_fav{{row["BookID"]}} ' class="btn btn-primary">Make Favorite</a>
+                    {%endif%}
                 </div>
             </div>
         </div>

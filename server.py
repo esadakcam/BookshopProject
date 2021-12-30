@@ -6,10 +6,11 @@ from RegisterForm import RegisterForm
 from passlib.hash import sha256_crypt
 from LoginForm import LoginForm
 
-# TODO: SHOW BOOKS bir birim kaymış düzelt
 # TODO: Author-Book dogru mu kontrol et
 app = Flask(__name__)
 db = Database("Bookshop.db")
+
+# TODO: Kullanilmadi kullan
 
 
 def logged(function):  # add wishlistte kullanılcak
@@ -127,6 +128,12 @@ def update_author(key):
             str(key), str(firstName), str(lastName), str(birthday), str(country), str(hrs))
         flash(message)
     return render_template("./author/update_author.html", authorId=key)
+
+
+@app.route("/book/make_fav<string:key>")
+def make_fav(key):
+    db.make_fav(session["username"], key)
+    return redirect(url_for("showbooks"))
 
 
 @app.route("/book/author_info<string:key>")
