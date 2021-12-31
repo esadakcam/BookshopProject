@@ -34,7 +34,6 @@ class Database:
         rows = cur.fetchall()
         return rows
 
-#TODO: doldur
     def make_fav(self, username, key):
         message = ""
         try:
@@ -47,6 +46,12 @@ class Database:
         except Exception as exp:
             message = str(exp.args) + "Failed"
         return message
+
+#TODO: doldur
+    def get_fav_book(self, username):
+        try:
+            with sqlite3.connect(self.databaseName) as con:
+                query = "Select "
 
     def show_all_authors(self):
         cur = self.__connect_database().cursor()

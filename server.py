@@ -25,6 +25,13 @@ def require_login(function):  # add wishlistte kullanılcak
     return decorated_function
 
 
+@app.route("/logout")
+@require_login
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -70,7 +77,9 @@ def showbooks():
     imgs = []
     for i in rows:
         imgs.append(b64encode(i["Img"]).decode("utf-8"))
-    return render_template("./book/show_books.html", rows=rows, imgs=imgs)
+    if session["logged_in"]:
+        fav_book = db.get_fav_book(session["username"])
+    return render_template("./book/show_books.html", rows=rows, imgs=imgs, fav_book=fav_book)
 
 
 @app.route("/author/showauthor")
