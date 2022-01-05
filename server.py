@@ -7,9 +7,8 @@ from passlib.hash import sha256_crypt
 from LoginForm import LoginForm
 from functools import wraps
 
-# TODO: Author-Book dogru mu kontrol et
 
-# TODO:logout implenment et
+# TODO: Flash message content, show author timestamp, show book card allign, create tables, update delete books
 app = Flask(__name__)
 db = Database("Bookshop.db")
 
@@ -80,7 +79,6 @@ def login():
     return render_template("login.html", form=form)
 
 
-# showbooks is not implemented
 @app.route("/book/showbooks")
 def showbooks():
     rows = db.show_all_books()
