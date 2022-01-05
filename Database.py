@@ -49,9 +49,17 @@ class Database:
 
 #TODO: doldur
     def get_fav_book(self, username):
+        message = ""
         try:
             with sqlite3.connect(self.databaseName) as con:
-                query = "Select "
+                cur = con.cursor()
+                query = "Select Title from Users join Book on BookID = wishlist Where wishlist = BookID and username = ? "
+                cur.execute(query, (username,))
+                message = "Success"
+                return cur.fetchone()
+        except Exception as e:
+            message = "Failed " + str(e.args)
+        return message
 
     def show_all_authors(self):
         cur = self.__connect_database().cursor()
@@ -124,12 +132,12 @@ class Database:
         try:
             with sqlite3.connect(self.databaseName) as con:
                 cur = con.cursor()
-                # query = 'Select * From Author Where (AuthID = ? )'
-                # cur.execute(query, (str(authorId),))
+                query = 'Select * From Author Where (AuthID = ? )'
+                cur.execute(query, (str(authorId),))
 
-                # if len(cur.fetchall()) == 0:
-                #     exception_meessage = "No such author"
-                #     raise Exception(exception_meessage)
+                if len(cur.fetchall()) == 0:
+                    exception_meessage = "No such author"
+                    raise Exception(exception_meessage)
                 cur.execute("PRAGMA foreign_keys = ON;")
                 query = 'Delete From AUTHOR Where(AuthID = ?)'
                 cur.execute(query, (str(authorId),))
@@ -138,6 +146,18 @@ class Database:
         except Exception as exp:
             message = exp.args
 
+        return message
+
+    def delete_user(self, username):
+        message = ""
+        try:
+            with sqlite3.connect(self.databaseName) as con:
+                cur = con.cursor()
+                query = "Delete From Users Where username = ? "
+                cur.execute(query, (username,))
+                message = "Success"
+        except Exception as e:
+            message = "Failed " + str(e.args)
         return message
 
     def update_author(self, key, firstName, lastName, birthday, country, hrs):
@@ -159,8 +179,8 @@ class Database:
                                            qBirthday, qCountry, qHrs, authorId))
                 message = "Successful"
         except Exception as e:
-            # message = "Failed"
-            message = e.args
+            message = "Failed"
+            message += str(e.args)
         return message
 
     def show_author_info(self, key):

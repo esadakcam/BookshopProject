@@ -32,6 +32,16 @@ def logout():
     return redirect(url_for("index"))
 
 
+@app.route("/unregister")
+@require_login
+def unregister():
+    username = session["username"]
+    session.clear()
+    message = db.delete_user(username)
+    flash(message)
+    return redirect(url_for("index"))
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -75,10 +85,13 @@ def login():
 def showbooks():
     rows = db.show_all_books()
     imgs = []
+    fav_book = None
     for i in rows:
         imgs.append(b64encode(i["Img"]).decode("utf-8"))
-    if session["logged_in"]:
+    if "logged_in" in session:
         fav_book = db.get_fav_book(session["username"])
+        if fav_book:
+            fav_book = fav_book[0]
     return render_template("./book/show_books.html", rows=rows, imgs=imgs, fav_book=fav_book)
 
 

@@ -52,7 +52,11 @@ Show Books
                 <img class="card-img-top" src="data:;base64,{{ imgs[loop.index - 1] }}" alt="Card image cap">
 
                 <div class="card-body">
-                    <h5 class="card-title">{{row["Title"]}}</h5>
+                    {%if fav_book == row["Title"]%}
+                    <h5 class="card-title">{{row["Title"] + "\U0001F642"}}</h5>
+                    {%else %}
+                    <h5 class="card-title">{{row["Title"] }}</h5>
+                    {%endif%}
                     <div class="d-flex justify-content-between">
                         <div>Book Id:</div>
                         <div>{{row["BookID"]}}</div>
