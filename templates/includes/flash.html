@@ -1,11 +1,18 @@
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<ul class=flashes>
-    {% for message in messages %}
-    {% if message != ""%}
-    <li>{{ message }}</li>
-    {% endif%}
-    {% endfor %}
-</ul>
+<div class="container">
+    <br>
+    <ul class=flashes>
+        {% for message in messages %}
+        {% if message != ""%}
+        <li>
+            <div class="alert alert-info" role="alert">
+                {{ message }}</div>
+        </li>
+        {% endif%}
+        {% endfor %}
+    </ul>
+</div>
+
 {% endif %}
 {% endwith %}
