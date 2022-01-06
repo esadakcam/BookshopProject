@@ -53,9 +53,9 @@ Show Books
 
                 <div class="card-body">
                     {%if fav_book == row["Title"]%}
-                    <h5 class="card-title">{{row["Title"] + "\U0001F642"}}</h5>
+                    <h5 class="card-title" style="min-height: 95px;">{{row["Title"] + "\U0001F642"}}</h5>
                     {%else %}
-                    <h5 class="card-title">{{row["Title"] }}</h5>
+                    <h5 class="card-title" style="min-height: 95px;">{{row["Title"] }}</h5>
                     {%endif%}
                     <div class="d-flex justify-content-between">
                         <div>Book Id:</div>
@@ -79,9 +79,9 @@ Show Books
                     </div>
 
 
-                    <a href='author_info{{row["AuthId"]}} ' class="btn btn-primary">Show Author</a>
+                    <a href='author_info{{row["AuthId"]}} ' class="btn btn-primary mt-3">Show Author</a>
                     {%if session["logged_in"]%}
-                    <a href='make_fav{{row["BookID"]}} ' class="btn btn-primary">Make Favorite</a>
+                    <a href='make_fav{{row["BookID"]}} ' class="btn btn-primary mt-3">Make Favorite</a>
                     {%endif%}
                 </div>
             </div>
