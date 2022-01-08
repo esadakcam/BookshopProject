@@ -25,7 +25,7 @@ Show Authors
                     <th scope="row"><a href='update_author{{row["AuthId"]}}'>{{row["AuthId"]}}</a></th>
                     <td>{{row["FirstName"]}}</td>
                     <td>{{row["LastName"]}}</td>
-                    <td>{{row["Birthday"]}}</td>
+                    <td>{{birthday[loop.index - 1]}}</td>
                     <td>{{row["CountryOfResidence"]}}</td>
                     <td>{{row["HrsWritingPerDay"]}}</td>
                 </tr>

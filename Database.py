@@ -9,8 +9,8 @@ class Database:
         self.databaseName = databaseName
         with sqlite3.connect(self.databaseName) as con:
             cur = con.cursor()
-            # TODO: diger tabloların createlerini de ekle
-            query = """
+            queries = [
+                """
             CREATE TABLE IF NOT EXISTS AUTHOR (
 	        AuthID	TEXT,
 	        FirstName	TEXT,
@@ -18,9 +18,37 @@ class Database:
 	        Birthday	TIMESTAMP,
 	        CountryOfResidence	TEXT,
 	        HrsWritingPerDay	REAL,
-	        PRIMARY KEY("AuthID"));
-            """
-            cur.execute(query)
+	        PRIMARY KEY(AuthID));
+            """,
+                """
+            CREATE TABLE IF NOT EXISTS Book (
+	        BookID	TEXT,
+	        Title	TEXT,
+	        OnlineSalesWebsite	TEXT,
+	        AvaliableSalesAreas	TEXT,
+	        Stock	INTEGER,
+	        TotalNumberOfOrders	INTEGER,
+	        AuthID	TEXT,
+	        Img	BLOB,
+	        FOREIGN KEY(AuthID) REFERENCES AUTHOR(AuthID) ON DELETE CASCADE,
+	        PRIMARY KEY(BookID)
+            );
+            """,
+                """
+            CREATE TABLE IF NOT EXISTS Users (
+	        user_id	Integer,
+	        name	char NOT NULL,
+	        username	char NOT NULL UNIQUE,
+	        password	char NOT NULL,
+	        email	char NOT NULL,
+	        wishList	char,
+	        FOREIGN KEY(wishList) REFERENCES Book(BookID),
+	        PRIMARY KEY(user_id AUTOINCREMENT)
+            );
+            """,
+            ]
+            for query in queries:
+                cur.execute(query)
             print("ok")
 
     def __connect_database(self):
@@ -47,7 +75,7 @@ class Database:
             message = str(exp.args) + "Failed"
         return message
 
-#TODO: doldur
+    # TODO: doldur
     def get_fav_book(self, username):
         message = ""
         try:
@@ -64,14 +92,18 @@ class Database:
     def show_all_authors(self):
         cur = self.__connect_database().cursor()
         cur.execute("SELECT * FROM Author")
-        return cur.fetchall()
+        rows = cur.fetchall()
+
+        return rows
 
     def register(self, name, username, email, password):
         message = ""
         try:
             with sqlite3.connect(self.databaseName) as con:
                 cur = con.cursor()
-                query = "Insert Into Users(name,username,password,email) Values(?,?,?,?)"
+                query = (
+                    "Insert Into Users(name,username,password,email) Values(?,?,?,?)"
+                )
                 cur.execute(query, (name, username, password, email))
                 message = "Success"
         except Exception as exp:
@@ -108,19 +140,22 @@ class Database:
             try:
                 letters = string.ascii_uppercase
                 digits = string.digits
-                newId = ''.join(random.choice(letters) for i in range(
-                    2)) + ''.join(random.choice(digits) for i in range(3))
+                newId = "".join(random.choice(letters) for i in range(2)) + "".join(
+                    random.choice(digits) for i in range(3)
+                )
                 with sqlite3.connect(self.databaseName) as con:
                     cur = con.cursor()
-                    id_query = 'Select AuthID from Author'
+                    id_query = "Select AuthID from Author"
                     cur.execute(id_query)
                     id_list = list(cur.fetchall())
                     while (newId,) in id_list:
-                        newId = ''.join(random.choice(letters) for i in range(
-                            2)) + ''.join(random.choice(digits) for i in range(3))
-                    add_query = 'Insert Into AUTHOR Values(?,?,?,?,?,?)'
-                    cur.execute(add_query,
-                                (newId, firstName, lastName, birthday, country, hrs))
+                        newId = "".join(
+                            random.choice(letters) for i in range(2)
+                        ) + "".join(random.choice(digits) for i in range(3))
+                    add_query = "Insert Into AUTHOR Values(?,?,?,?,?,?)"
+                    cur.execute(
+                        add_query, (newId, firstName, lastName, birthday, country, hrs)
+                    )
 
                     message = "Successful"
             except Exception as exp:
@@ -132,14 +167,14 @@ class Database:
         try:
             with sqlite3.connect(self.databaseName) as con:
                 cur = con.cursor()
-                query = 'Select * From Author Where (AuthID = ? )'
+                query = "Select * From Author Where (AuthID = ? )"
                 cur.execute(query, (str(authorId),))
 
                 if len(cur.fetchall()) == 0:
                     exception_meessage = "No such author"
                     raise Exception(exception_meessage)
                 cur.execute("PRAGMA foreign_keys = ON;")
-                query = 'Delete From AUTHOR Where(AuthID = ?)'
+                query = "Delete From AUTHOR Where(AuthID = ?)"
                 cur.execute(query, (str(authorId),))
 
                 message = "Success"
@@ -165,18 +200,19 @@ class Database:
         try:
             with sqlite3.connect(self.databaseName) as con:
                 cur = con.cursor()
-                old_data_query = 'Select * From Author Where (AuthId = ?)'
+                old_data_query = "Select * From Author Where (AuthId = ?)"
                 cur.execute(old_data_query, (str(key),))
                 author = cur.fetchall()
                 qFname = firstName if firstName != "" else author[0][1]
                 qLname = lastName if lastName != "" else author[0][2]
                 qBirthday = birthday if birthday != "" else author[0][3]
-                qCountry = country if country != ""else author[0][4]
+                qCountry = country if country != "" else author[0][4]
                 qHrs = hrs if hrs != "" else author[0][5]
 
-                update_query = 'Update AUTHOR Set FirstName = ?, LastName = ?,Birthday = ?,CountryOfResidence = ?, HrsWritingPerDay= ? Where AuthID = ?'
-                cur.execute(update_query, (qFname, qLname,
-                                           qBirthday, qCountry, qHrs, authorId))
+                update_query = "Update AUTHOR Set FirstName = ?, LastName = ?,Birthday = ?,CountryOfResidence = ?, HrsWritingPerDay= ? Where AuthID = ?"
+                cur.execute(
+                    update_query, (qFname, qLname, qBirthday, qCountry, qHrs, authorId)
+                )
                 message = "Successful"
         except Exception as e:
             message = "Failed"
@@ -196,6 +232,5 @@ class Database:
                 row = cur.fetchall()
                 return row, message
         except Exception as exp:
-            message = "This author cannot be found in the database " + \
-                str(exp.args)
+            message = "This author cannot be found in the database " + str(exp.args)
             return row, message

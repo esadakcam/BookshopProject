@@ -8,7 +8,7 @@ from LoginForm import LoginForm
 from functools import wraps
 
 
-# TODO: Flash message content, show author timestamp, show book card allign, create tables, update delete books
+# TODO: Flash message content,  update delete books
 app = Flask(__name__)
 db = Database("Bookshop.db")
 
@@ -21,6 +21,7 @@ def require_login(function):  # add wishlistte kullanılcak
         else:
             flash("Please login to see this page.")
             return redirect(url_for("login"))
+
     return decorated_function
 
 
@@ -69,7 +70,7 @@ def login():
         password = form.password.data
         message, success = db.login(username, password)
         flash(message)
-        if(success):
+        if success:
             redirect(url_for("index"))
             session["logged_in"] = True
             session["username"] = username
@@ -90,13 +91,18 @@ def showbooks():
         fav_book = db.get_fav_book(session["username"])
         if fav_book:
             fav_book = fav_book[0]
-    return render_template("./book/show_books.html", rows=rows, imgs=imgs, fav_book=fav_book)
+    return render_template(
+        "./book/show_books.html", rows=rows, imgs=imgs, fav_book=fav_book
+    )
 
 
 @app.route("/author/showauthor")
 def showauthor():
     rows = db.show_all_authors()
-    return render_template("./author/show_authors.html", rows=rows)
+    birthday = []
+    for row in rows:
+        birthday.append(row["Birthday"].split()[0])
+    return render_template("./author/show_authors.html", rows=rows, birthday=birthday)
 
 
 @app.route("/author/addauthor", methods=["POST", "GET"])
@@ -108,8 +114,7 @@ def addauthor():
         birthday = request.form["birthday"]
         country = request.form["country"]
         hrs = request.form["hrs"]
-        message = db.add_author(firstName,
-                                lastName, birthday, country, hrs)
+        message = db.add_author(firstName, lastName, birthday, country, hrs)
         flash(message)
     return render_template("./author/addauthor.html")
 
@@ -123,8 +128,7 @@ def addbook():
         birthday = request.form["birthday"]
         country = request.form["country"]
         hrs = request.form["hrs"]
-        message = db.add_author(firstName,
-                                lastName, birthday, country, hrs)
+        message = db.add_author(firstName, lastName, birthday, country, hrs)
         flash(message)
     return render_template("./book/addbook.html")
 
@@ -146,7 +150,13 @@ def update_author(key):
         country = request.form["country"]
         hrs = request.form["hrs"]
         message = db.update_author(
-            str(key), str(firstName), str(lastName), str(birthday), str(country), str(hrs))
+            str(key),
+            str(firstName),
+            str(lastName),
+            str(birthday),
+            str(country),
+            str(hrs),
+        )
         flash(message)
     return render_template("./author/update_author.html", authorId=key)
 
@@ -162,10 +172,11 @@ def make_fav(key):
 @app.route("/book/author_info<string:key>")
 def author_info(key):
     rows, message = db.show_author_info(key)
+
     flash(message)
     return render_template("./book/author_info.html", rows=rows)
 
 
 if __name__ == "__main__":
-    app.secret_key = 'the random string'
+    app.secret_key = "the random string"
     app.run(debug=True)
