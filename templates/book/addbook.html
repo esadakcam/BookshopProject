@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Add Author
+Add Book
 {% endblock %}
 
 {% block Body %}
@@ -14,31 +14,31 @@ Add Author
             <form action="/book/addbook" method="POST">
 
                 <div class="form-group">
-                    <label>First Name</label>
-                    <input type="text" class="form-control" name="firstName">
+                    <label>Title</label>
+                    <input type="text" class="form-control" name="title">
 
                 </div>
                 <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" class="form-control" name="lastName">
+                    <label>Website</label>
+                    <input type="text" class="form-control" name="website">
 
                 </div>
                 <div class="form-group">
-                    <label>Birthday </label>
-                    <input type="text" placeholder="mm-dd-yyyy" class="form-control" name="birthday">
+                    <label>Area</label>
+                    <input type="text" class="form-control" name="area">
 
                 </div>
                 <div class="form-group">
-                    <label>Country</label>
-                    <input type="text" class="form-control" name="country">
+                    <label>Stock</label>
+                    <input type="number" class="form-control" name="stock">
 
                 </div>
                 <div class="form-group">
-                    <label>Hours Writing Per Day</label>
-                    <input type="number" class="form-control" name="hrs">
+                    <label>AuthId</label>
+                    <input type="text" class="form-control" name="authId">
 
                 </div>
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="btn btn-primary mt-3">Add</button>
             </form>
         </div>
     </div>

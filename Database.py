@@ -259,3 +259,56 @@ class Database:
             message = "Failed"
             message += str(e.args)
         return message
+
+    def add_book(self, title, website, area, stock, authId):
+        if not (title and authId):
+            message = "Title and AuthorID must be proivded."
+        else:
+            try:
+                letters = string.ascii_uppercase
+                digits = string.digits
+                newId = "".join(random.choice(letters) for i in range(2)) + "".join(
+                    random.choice(digits) for i in range(3)
+                )
+                with sqlite3.connect(self.databaseName) as con:
+                    cur = con.cursor()
+                    auth_query = "Select * From AUTHOR Where AuthID = ?"
+                    if len(cur.execute(auth_query, (authId,)).fetchall()) == 0:
+                        raise Exception("No such author")
+                    id_query = "Select BookID from Book"
+                    cur.execute(id_query)
+                    id_list = list(cur.fetchall())
+                    while (newId,) in id_list:
+                        newId = "".join(
+                            random.choice(letters) for i in range(2)
+                        ) + "".join(random.choice(digits) for i in range(3))
+                    add_query = "Insert Into Book (BookID,Title,OnlineSalesWebsite,AvaliableSalesAreas,Stock,TotalNumberOfOrders,AuthID) Values (?,?,?,?,?,?,?)"
+                    cur.execute(
+                        add_query,
+                        (newId, title, website, area, stock, 0, authId),
+                    )
+
+                    message = "Successful"
+            except Exception as exp:
+                message = "Failed" + str(exp.args)
+
+        return message
+
+    def remove_book(self, bookId):
+        message = ""
+        try:
+            with sqlite3.connect(self.databaseName) as con:
+                cur = con.cursor()
+                query = "Select * From Book Where (BookID = ?)"
+                cur.execute(query, (str(bookId),))
+                if len(cur.fetchall()) == 0:
+                    exception_meessage = "No such book"
+                    raise Exception(exception_meessage)
+                cur.execute("PRAGMA foreign_keys = ON;")
+                query = "Delete From Book Where(BookID = ?)"
+                cur.execute(query, (str(bookId),))
+                message = "Success"
+        except Exception as exp:
+            message = exp.args
+
+        return message

@@ -103,7 +103,10 @@ def showbooks():
     imgs = []
     fav_book = None
     for i in rows:
-        imgs.append(b64encode(i["Img"]).decode("utf-8"))
+        try:
+            imgs.append(b64encode(i["Img"]).decode("utf-8"))
+        except:
+            pass
     if "logged_in" in session:
         fav_book = db.get_fav_book(session["username"])
         if fav_book:
@@ -118,7 +121,10 @@ def showauthor():
     rows = db.show_all_authors()
     birthday = []
     for row in rows:
-        birthday.append(row["Birthday"].split()[0])
+        try:
+            birthday.append(row["Birthday"].split()[0])
+        except:
+            pass
     return render_template("./author/show_authors.html", rows=rows, birthday=birthday)
 
 
@@ -140,12 +146,12 @@ def addauthor():
 def addbook():
     if request.method == "POST":
 
-        firstName = request.form["firstName"]
-        lastName = request.form["lastName"]
-        birthday = request.form["birthday"]
-        country = request.form["country"]
-        hrs = request.form["hrs"]
-        message = db.add_author(firstName, lastName, birthday, country, hrs)
+        title = request.form["title"]
+        website = request.form["website"]
+        area = request.form["area"]
+        stock = request.form["stock"]
+        authId = request.form["authId"]
+        message = db.add_book(title, website, area, stock, authId)
         flash(message)
     return render_template("./book/addbook.html")
 
@@ -156,6 +162,14 @@ def removeauthor():
         message = db.remove_author(request.form["authorId"])
         flash(message)
     return render_template("./author/removeauthor.html")
+
+
+@app.route("/book/removebook", methods=["POST", "GET"])
+def removebook():
+    if request.method == "POST":
+        message = db.remove_book(request.form["bookId"])
+        flash(message)
+    return render_template("./book/removebook.html")
 
 
 @app.route("/author/update_author<string:key>", methods=["POST", "GET"])
@@ -195,5 +209,5 @@ def author_info(key):
 
 
 if __name__ == "__main__":
-    app.secret_key = "the random string"
+    app.secret_key = "itudb2109"
     app.run(debug=True)
