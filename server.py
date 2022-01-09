@@ -8,7 +8,7 @@ from LoginForm import LoginForm
 from functools import wraps
 
 
-# TODO: Flash message content,  update delete books
+# TODO: DELETE BOOKS PRAGMA ACIVATE
 app = Flask(__name__)
 db = Database("Bookshop.db")
 
@@ -45,6 +45,22 @@ def unregister():
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/book/update_book<string:key>", methods=["GET", "POST"])
+def update_book(key):
+    if request.method == "POST":
+        website = request.form["website"]
+        area = request.form["area"]
+        stock = request.form["stock"]
+        title = request.form["title"]
+        order = request.form["order"]
+
+        message = db.update_book(
+            str(key), str(website), str(area), str(stock), str(title), str(order)
+        )
+        flash(message)
+    return render_template("./book/update_book.html", bookId=key)
 
 
 @app.route("/register", methods=["GET", "POST"])

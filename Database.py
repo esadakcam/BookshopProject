@@ -42,7 +42,7 @@ class Database:
 	        password	char NOT NULL,
 	        email	char NOT NULL,
 	        wishList	char,
-	        FOREIGN KEY(wishList) REFERENCES Book(BookID),
+	        FOREIGN KEY(wishList) REFERENCES Book(BookID) ON DELETE SET NULL,
 	        PRIMARY KEY(user_id AUTOINCREMENT)
             );
             """,
@@ -234,3 +234,28 @@ class Database:
         except Exception as exp:
             message = "This author cannot be found in the database " + str(exp.args)
             return row, message
+
+    def update_book(self, key, website, area, stock, title, order):
+        bookId = key
+        try:
+            with sqlite3.connect(self.databaseName) as con:
+                cur = con.cursor()
+                old_data_query = "Select * From Book Where (BookID = ?)"
+                cur.execute(old_data_query, (str(key),))
+                book = cur.fetchall()
+                q_website = website if website != "" else book[0][2]
+                q_area = area if area != "" else book[0][3]
+                q_stock = stock if stock != "" else book[0][4]
+                q_title = title if title != "" else book[0][1]
+                q_order = order if order != "" else book[0][5]
+
+                update_query = "Update Book Set Title = ?, OnlineSalesWebSite = ?,AvaliableSalesAreas = ?,Stock = ?, TotalNumberOfOrders= ? Where BookID = ?"
+                cur.execute(
+                    update_query,
+                    (q_title, q_website, q_area, q_stock, q_order, bookId),
+                )
+                message = "Successful"
+        except Exception as e:
+            message = "Failed"
+            message += str(e.args)
+        return message

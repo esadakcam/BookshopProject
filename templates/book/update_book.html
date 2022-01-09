@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Update Book
+{% endblock %}
+
+{% block Body %}
+<div class="container" style="padding-top: 30px; width: 50%;">
+    <div class="card">
+        <div class="card-header">
+            Update Book {{bookId}}
+        </div>
+        <div class="/book/update_book">
+            <form action="/book/update_book{{bookId}}" method="POST">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" class="form-control" name="title">
+
+                </div>
+                <div class="form-group">
+                    <label>Stock</label>
+                    <input type="text" class="form-control" name="stock">
+
+                </div>
+                <div class="form-group">
+                    <label>Area</label>
+                    <input type="text" class="form-control" name="area">
+
+                </div>
+                <div class="form-group">
+                    <label>Website </label>
+                    <input type="text" class="form-control" name="website">
+
+                </div>
+                <div class="form-group">
+                    <label>Order</label>
+                    <input type="text" class="form-control" name="order">
+
+                </div>
+                <button style="align-items: center;" type="submit" class="btn btn-primary mt-3">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
