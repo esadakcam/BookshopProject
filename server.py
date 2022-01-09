@@ -60,6 +60,7 @@ def update_book(key):
             str(key), str(website), str(area), str(stock), str(title), str(order)
         )
         flash(message)
+        return redirect(url_for("showbooks"))
     return render_template("./book/update_book.html", bookId=key)
 
 
